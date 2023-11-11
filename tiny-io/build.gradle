@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+group 'net.tinyio'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += "--enable-preview"
+}
+tasks.withType(Test).configureEach {
+    jvmArgs += "--enable-preview"
+}
+
+test {
+    useJUnitPlatform()
+
+    systemProperty "java.library.path", file("${project(":tiny-io-jni").buildDir}/lib/main/debug").absolutePath
+
+
+
+}
