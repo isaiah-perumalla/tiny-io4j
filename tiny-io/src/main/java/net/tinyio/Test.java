@@ -13,12 +13,6 @@ public class Test {
     private static final MemorySegment ERRNO_LOCATION = net_h.__errno_location();
     private static final long MAX_FDS = 64;
 
-    public native void print();
-
-    static {
-//        System.loadLibrary("tiny-io-jni");
-    }
-
     public static void main(String[] args) {
         try (Arena arena = Arena.ofConfined()) {
             final int fd = net_h.socket(net_h.PF_INET(), net_h.SOCK_STREAM(), 0);
@@ -30,7 +24,7 @@ public class Test {
             if (err < 0) {
                 throw new IllegalStateException("could not bind ");
             }
-            setNonBlocking(fd);
+            Utils.setNonBlocking(fd);
 
 
             err = net_h.listen(fd, 128);
@@ -130,14 +124,7 @@ public class Test {
         pollFds.set(ValueLayout.JAVA_SHORT, offset + ValueLayout.JAVA_INT.byteSize(), events);
     }
 
-    private static void setNonBlocking(int fd) {
 
-        final int flags = net_h.fcntl(fd, net_h.F_GETFL(), 0);
-        final int err = net_h.fcntl(fd, net_h.F_SETFL(), flags|net_h.O_NONBLOCK());
-        if (err < 0) {
-            throw new IllegalStateException("unable to set fd to O_NONBLOCK");
-        }
-    }
 
     private static void doEcho(int client_fd, MemorySegment buffer) {
         for(;;) {

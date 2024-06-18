@@ -67,6 +67,30 @@ public class net_h  {
     }
     /**
      * {@snippet :
+     * #define POLLOUT 4
+     * }
+     */
+    public static int POLLOUT() {
+        return (int)4L;
+    }
+    /**
+     * {@snippet :
+     * #define POLLERR 8
+     * }
+     */
+    public static int POLLERR() {
+        return (int)8L;
+    }
+    /**
+     * {@snippet :
+     * #define POLLNVAL 32
+     * }
+     */
+    public static int POLLNVAL() {
+        return (int)32L;
+    }
+    /**
+     * {@snippet :
      * #define O_NONBLOCK 2048
      * }
      */
@@ -289,8 +313,24 @@ public class net_h  {
             throw new AssertionError("should not reach here", ex$);
         }
     }
+    public static MethodHandle htonl$MH() {
+        return RuntimeHelper.requireNonNull(constants$5.const$4,"htonl");
+    }
+    /**
+     * {@snippet :
+     * uint32_t htonl(uint32_t __hostlong);
+     * }
+     */
+    public static int htonl(int __hostlong) {
+        var mh$ = htonl$MH();
+        try {
+            return (int)mh$.invokeExact(__hostlong);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
     public static MethodHandle htons$MH() {
-        return RuntimeHelper.requireNonNull(constants$5.const$5,"htons");
+        return RuntimeHelper.requireNonNull(constants$5.const$6,"htons");
     }
     /**
      * {@snippet :
