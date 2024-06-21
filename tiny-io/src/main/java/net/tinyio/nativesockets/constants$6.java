@@ -11,23 +11,22 @@ final class constants$6 {
 
     // Suppresses default constructor, ensuring non-instantiability.
     private constants$6() {}
-    static final StructLayout const$0 = MemoryLayout.structLayout(
+    static final MethodHandle const$0 = RuntimeHelper.downcallHandle(
+        "htonl",
+        constants$5.const$2
+    );
+    static final MethodHandle const$1 = RuntimeHelper.downcallHandle(
+        "htons",
+        constants$5.const$4
+    );
+    static final StructLayout const$2 = MemoryLayout.structLayout(
         JAVA_INT.withName("fd"),
         JAVA_SHORT.withName("events"),
         JAVA_SHORT.withName("revents")
     ).withName("pollfd");
-    static final VarHandle const$1 = constants$6.const$0.varHandle(MemoryLayout.PathElement.groupElement("fd"));
-    static final VarHandle const$2 = constants$6.const$0.varHandle(MemoryLayout.PathElement.groupElement("events"));
-    static final VarHandle const$3 = constants$6.const$0.varHandle(MemoryLayout.PathElement.groupElement("revents"));
-    static final FunctionDescriptor const$4 = FunctionDescriptor.of(JAVA_INT,
-        RuntimeHelper.POINTER,
-        JAVA_LONG,
-        JAVA_INT
-    );
-    static final MethodHandle const$5 = RuntimeHelper.downcallHandle(
-        "poll",
-        constants$6.const$4
-    );
+    static final VarHandle const$3 = constants$6.const$2.varHandle(MemoryLayout.PathElement.groupElement("fd"));
+    static final VarHandle const$4 = constants$6.const$2.varHandle(MemoryLayout.PathElement.groupElement("events"));
+    static final VarHandle const$5 = constants$6.const$2.varHandle(MemoryLayout.PathElement.groupElement("revents"));
 }
 
 

@@ -22,16 +22,12 @@ final class constants$5 {
         "ntohl",
         constants$5.const$2
     );
-    static final MethodHandle const$4 = RuntimeHelper.downcallHandle(
-        "htonl",
-        constants$5.const$2
-    );
-    static final FunctionDescriptor const$5 = FunctionDescriptor.of(JAVA_SHORT,
+    static final FunctionDescriptor const$4 = FunctionDescriptor.of(JAVA_SHORT,
         JAVA_SHORT
     );
-    static final MethodHandle const$6 = RuntimeHelper.downcallHandle(
-        "htons",
-        constants$5.const$5
+    static final MethodHandle const$5 = RuntimeHelper.downcallHandle(
+        "ntohs",
+        constants$5.const$4
     );
 }
 

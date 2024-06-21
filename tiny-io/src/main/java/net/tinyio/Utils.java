@@ -7,6 +7,16 @@ import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 
 public class Utils {
+    private static final StringBuilder sb = new StringBuilder();
+    public static CharSequence ipAddressToString(int ipAdd) {
+        sb.setLength(0);
+        sb.append(ipAdd  & 0xFF).append(".")
+                .append((ipAdd >> 8) & 0xFF).append(".")
+                .append((ipAdd >> 16) & 0xFF).append(".")
+                .append((ipAdd >> 24) & 0xFF);
+
+        return sb;
+    }
 
     public static void setNonBlocking(int fd) {
 

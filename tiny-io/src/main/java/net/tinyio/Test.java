@@ -57,6 +57,7 @@ public class Test {
                     }
                     else {
                         System.out.println(String.format("client connected fd=%d", client_fd));
+                        System.out.println(String.format("client connected fd=%d", client_fd));
                     }
                     int index = registerPollInterest(pollFds, client_fd, (short) (net_h.POLLIN() | net_h.POLLPRI()));
                     assert index >= 0;

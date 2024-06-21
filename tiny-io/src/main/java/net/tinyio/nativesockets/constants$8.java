@@ -7,34 +7,35 @@ import java.lang.invoke.VarHandle;
 import java.nio.ByteOrder;
 import java.lang.foreign.*;
 import static java.lang.foreign.ValueLayout.*;
-final class constants$7 {
+final class constants$8 {
 
     // Suppresses default constructor, ensuring non-instantiability.
-    private constants$7() {}
+    private constants$8() {}
     static final FunctionDescriptor const$0 = FunctionDescriptor.of(JAVA_INT,
-        RuntimeHelper.POINTER,
-        JAVA_LONG,
-        JAVA_INT
+        RuntimeHelper.POINTER
     );
     static final MethodHandle const$1 = RuntimeHelper.downcallHandle(
-        "poll",
-        constants$7.const$0
+        "inet_addr",
+        constants$8.const$0
     );
-    static final MethodHandle const$2 = RuntimeHelper.downcallHandleVariadic(
-        "fcntl",
-        constants$3.const$2
+    static final FunctionDescriptor const$2 = FunctionDescriptor.of(RuntimeHelper.POINTER,
+        MemoryLayout.structLayout(
+            JAVA_INT.withName("s_addr")
+        ).withName("in_addr")
     );
     static final MethodHandle const$3 = RuntimeHelper.downcallHandle(
-        "close",
-        constants$5.const$2
+        "inet_ntoa",
+        constants$8.const$2
     );
-    static final FunctionDescriptor const$4 = FunctionDescriptor.ofVoid(
+    static final FunctionDescriptor const$4 = FunctionDescriptor.of(RuntimeHelper.POINTER,
+        JAVA_INT,
         RuntimeHelper.POINTER,
-        JAVA_LONG
+        RuntimeHelper.POINTER,
+        JAVA_INT
     );
     static final MethodHandle const$5 = RuntimeHelper.downcallHandle(
-        "bzero",
-        constants$7.const$4
+        "inet_ntop",
+        constants$8.const$4
     );
 }
 

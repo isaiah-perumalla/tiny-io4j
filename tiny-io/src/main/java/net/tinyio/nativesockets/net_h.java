@@ -313,8 +313,24 @@ public class net_h  {
             throw new AssertionError("should not reach here", ex$);
         }
     }
+    public static MethodHandle ntohs$MH() {
+        return RuntimeHelper.requireNonNull(constants$5.const$5,"ntohs");
+    }
+    /**
+     * {@snippet :
+     * uint16_t ntohs(uint16_t __netshort);
+     * }
+     */
+    public static short ntohs(short __netshort) {
+        var mh$ = ntohs$MH();
+        try {
+            return (short)mh$.invokeExact(__netshort);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
     public static MethodHandle htonl$MH() {
-        return RuntimeHelper.requireNonNull(constants$5.const$4,"htonl");
+        return RuntimeHelper.requireNonNull(constants$6.const$0,"htonl");
     }
     /**
      * {@snippet :
@@ -330,7 +346,7 @@ public class net_h  {
         }
     }
     public static MethodHandle htons$MH() {
-        return RuntimeHelper.requireNonNull(constants$5.const$6,"htons");
+        return RuntimeHelper.requireNonNull(constants$6.const$1,"htons");
     }
     /**
      * {@snippet :
@@ -346,7 +362,7 @@ public class net_h  {
         }
     }
     public static MethodHandle poll$MH() {
-        return RuntimeHelper.requireNonNull(constants$6.const$5,"poll");
+        return RuntimeHelper.requireNonNull(constants$7.const$1,"poll");
     }
     /**
      * {@snippet :
@@ -362,7 +378,7 @@ public class net_h  {
         }
     }
     public static MethodHandle fcntl$MH() {
-        return RuntimeHelper.requireNonNull(constants$7.const$0,"fcntl");
+        return RuntimeHelper.requireNonNull(constants$7.const$2,"fcntl");
     }
     /**
      * {@snippet :
@@ -378,7 +394,7 @@ public class net_h  {
         }
     }
     public static MethodHandle close$MH() {
-        return RuntimeHelper.requireNonNull(constants$7.const$1,"close");
+        return RuntimeHelper.requireNonNull(constants$7.const$3,"close");
     }
     /**
      * {@snippet :
@@ -389,6 +405,70 @@ public class net_h  {
         var mh$ = close$MH();
         try {
             return (int)mh$.invokeExact(__fd);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+    public static MethodHandle bzero$MH() {
+        return RuntimeHelper.requireNonNull(constants$7.const$5,"bzero");
+    }
+    /**
+     * {@snippet :
+     * void bzero(void* __s, size_t __n);
+     * }
+     */
+    public static void bzero(MemorySegment __s, long __n) {
+        var mh$ = bzero$MH();
+        try {
+            mh$.invokeExact(__s, __n);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+    public static MethodHandle inet_addr$MH() {
+        return RuntimeHelper.requireNonNull(constants$8.const$1,"inet_addr");
+    }
+    /**
+     * {@snippet :
+     * in_addr_t inet_addr(char* __cp);
+     * }
+     */
+    public static int inet_addr(MemorySegment __cp) {
+        var mh$ = inet_addr$MH();
+        try {
+            return (int)mh$.invokeExact(__cp);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+    public static MethodHandle inet_ntoa$MH() {
+        return RuntimeHelper.requireNonNull(constants$8.const$3,"inet_ntoa");
+    }
+    /**
+     * {@snippet :
+     * char* inet_ntoa(struct in_addr __in);
+     * }
+     */
+    public static MemorySegment inet_ntoa(MemorySegment __in) {
+        var mh$ = inet_ntoa$MH();
+        try {
+            return (java.lang.foreign.MemorySegment)mh$.invokeExact(__in);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
+    public static MethodHandle inet_ntop$MH() {
+        return RuntimeHelper.requireNonNull(constants$8.const$5,"inet_ntop");
+    }
+    /**
+     * {@snippet :
+     * char* inet_ntop(int __af, void* __cp, char* __buf, socklen_t __len);
+     * }
+     */
+    public static MemorySegment inet_ntop(int __af, MemorySegment __cp, MemorySegment __buf, int __len) {
+        var mh$ = inet_ntop$MH();
+        try {
+            return (java.lang.foreign.MemorySegment)mh$.invokeExact(__af, __cp, __buf, __len);
         } catch (Throwable ex$) {
             throw new AssertionError("should not reach here", ex$);
         }
