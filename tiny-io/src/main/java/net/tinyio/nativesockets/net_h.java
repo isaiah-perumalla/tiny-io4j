@@ -43,6 +43,22 @@ public class net_h  {
     }
     /**
      * {@snippet :
+     * #define SO_SNDBUF 7
+     * }
+     */
+    public static int SO_SNDBUF() {
+        return (int)7L;
+    }
+    /**
+     * {@snippet :
+     * #define SO_RCVBUF 8
+     * }
+     */
+    public static int SO_RCVBUF() {
+        return (int)8L;
+    }
+    /**
+     * {@snippet :
      * #define EAGAIN 11
      * }
      */

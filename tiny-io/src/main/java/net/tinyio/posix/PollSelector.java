@@ -16,12 +16,16 @@ public class PollSelector {
     private final Int2IntHashMap fdToIndexMap;
     private final IntEntryPool intEntryPool = new IntEntryPool();
     private MemorySegment pollFds;
+    private final short[] readyFlags;
+    private final int[] readyFds;
     private Arena arena;
 
     public PollSelector(int maxFds, IoReadyNotifier selectorHandler) {
         this.maxFds = maxFds;
         this.fdToIndexMap = new Int2IntHashMap(maxFds, 0.75f, -1);
         this.selectorHandler = selectorHandler;
+        this.readyFds = new int[maxFds];
+        this.readyFlags = new short[maxFds];
     }
 
     public void open() {
@@ -91,21 +95,32 @@ public class PollSelector {
         final long offset = pollfd.sizeof() * index;
         pollFds.set(ValueLayout.JAVA_INT, offset, fd);
         pollFds.set(ValueLayout.JAVA_SHORT, offset + ValueLayout.JAVA_INT.byteSize(), events);
-    }
+        assert pollFdAt(index, pollFds) == fd;
+   }
 
     public int poll(int timeout) {
         int maxEntry = intEntryPool.maxEntry();
         int poll = net_h.poll(pollFds, maxEntry, timeout);
         if (poll > 0) {
+            int readyCount = 0;
+            //copy ready events as callback can change pollFds
             for (int entry = 0; entry < maxEntry; entry++) {
                 final int f = pollFdAt(entry, pollFds);
-                if (f == 0) continue;
-                final short revents = pollREventsAt(entry, pollFds);
+                if (f >= 0) {
+                    this.readyFds[readyCount] = f;
+                    this.readyFlags[readyCount] = pollREventsAt(entry, pollFds);
+                    readyCount++;
+                }
+            }
+
+            for (int i = 0; i < readyCount; i++) {
+                int fd = readyFds[i];
+                short revents = readyFlags[i];
                 if (0 != (revents & READ)) {
-                    selectorHandler.onRead(f);
+                    selectorHandler.onRead(fd);
                 }
                 if (0 != (revents & WRITE)) {
-                    selectorHandler.onWrite(f);
+                    selectorHandler.onWrite(fd);
                 }
             }
         }

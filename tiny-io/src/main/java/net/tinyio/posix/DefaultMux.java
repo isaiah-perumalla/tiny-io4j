@@ -12,6 +12,7 @@ public class DefaultMux implements IoMux {
     private long nextHandle = 0;
     @Override
     public void addInterest(long handle, Op op) {
+        assert handle != -1 : "invalid handle";
         int fd = (int) handleToFds.get(handle);
         if (fd == -1) {
             throw new IllegalStateException("invalid handle");
@@ -26,10 +27,12 @@ public class DefaultMux implements IoMux {
 
     @Override
     public void deRegister(long ioHandle) {
-        handlers.remove(ioHandle);
+        Handler handler = handlers.remove(ioHandle);
+
         int fd = (int) handleToFds.remove(ioHandle);
         assert ioHandle == fdToHandle.remove(fd);
         pollSelector.remove(fd);
+
     }
 
     @Override
@@ -56,14 +59,19 @@ public class DefaultMux implements IoMux {
         @Override
         public void onWrite(int fd) {
             Handler ioHandler = getHandler(fd);
-            ioHandler.onWrite();
+            if (ioHandler != null) {
+                ioHandler.onWrite();
+            }
         }
     }
 
     private Handler getHandler(int fd) {
         long handle = fdToHandle.get(fd);
-        assert handle != -1;
+        if (handle == -1) {
+            return null;
+        }
         Handler ioHandler = handlers.get(handle);
+        assert ioHandler != null;
         return ioHandler;
     }
 }

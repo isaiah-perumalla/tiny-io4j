@@ -1,5 +1,7 @@
-package net.tinyio;
+package net.tinyio.examples;
 
+import net.tinyio.TcpListener;
+import net.tinyio.Utils;
 import net.tinyio.posix.DefaultMux;
 import net.tinyio.posix.IoMux;
 import org.apache.logging.log4j.LogManager;
@@ -8,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.net.InetSocketAddress;
+import java.rmi.server.UID;
 
 public class EchoServer {
     private static final Logger logger = LogManager.getLogger(EchoServer.class);
@@ -58,19 +61,46 @@ public class EchoServer {
         @Override
         protected void availableToRead(EchoClientContext context) {
             long bytesRead = read(context, readSegment);
-            System.out.println("read bytes " + bytesRead);
-            logger.info("read bytes {} from [{}:{}]", bytesRead,
-                    Utils.ipAddressToString(context.ipAddress()),
-                    context.port());
+            if (bytesRead > 0) {
+                echoBack(context, readSegment, bytesRead);
+            }
+            else if (bytesRead < 0) {
+                //error
+                logError(context);
+            }
+        }
 
+        private void echoBack(EchoClientContext context, MemorySegment segment, long bytesRead) {
+            long sendCount = write(context, segment, (int) bytesRead);
+            if (sendCount < 0) {
+                logError(context);
+            }
+            else if (sendCount < bytesRead) {
+                logger.info("sent buffer is full, [bytes={},sent={}] [{}:{}]",
+                        bytesRead,
+                        sendCount,
+                        Utils.ipAddressToString(context.ipAddress()),
+                        context.port());
+            }
+            context.echoCount += sendCount;
         }
 
         @Override
         protected void onDisconnected(EchoClientContext context) {
-            logger.info("disconnected from [{}:{}]", Utils.ipAddressToString(context.ipAddress()), context.port());
+            logger.info("disconnected from [{}:{}], echoedBytes={}",
+                    Utils.ipAddressToString(context.ipAddress()),
+                    context.port(),
+                    context.echoCount);
         }
     }
 
+    private static void logError(EchoClientContext context) {
+        logger.error("send error {}, [{}:{}]", context.lastErrorNo(),
+                Utils.ipAddressToString(context.ipAddress()),
+                context.port());
+    }
+
     private static class EchoClientContext extends TcpListener.ClientContext{
+        long echoCount = 0;
     }
 }

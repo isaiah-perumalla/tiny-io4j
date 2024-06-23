@@ -7,5 +7,8 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <strings.h>
+#include <arpa/inet.h>
+
 
 
