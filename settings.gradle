@@ -1,0 +1,4 @@
+rootProject.name = 'tiny-io'
+include 'core-net'
+include 'tiny-io-examples'
+
