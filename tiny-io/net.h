@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <strings.h>
+#include <string.h>
 #include <arpa/inet.h>
 
 

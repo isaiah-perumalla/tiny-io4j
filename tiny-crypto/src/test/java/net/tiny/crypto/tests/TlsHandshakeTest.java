@@ -2,6 +2,7 @@ package net.tiny.crypto.tests;
 
 import net.tiny.crypto.CryptoUtils;
 import net.tiny.tls.HandshakeCodec;
+import net.tiny.tls.TlsKeySchedule;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -47,10 +48,17 @@ public class TlsHandshakeTest {
         }
     }
 
-    private static void printBytes(byte[] bytes, PrintStream out) {
-        for (int i = 0; i < bytes.length; i++) {
-            out.print(bytes[i]);
-        }
-        out.println();
+    @Test
+    public void testTls1_3_KeySchedule() {
+        String earlySecretHex = CryptoUtils.toHex(CryptoUtils.Tls13Sha256EarlySecret, null);
+        String empty256Hex = CryptoUtils.toHex(CryptoUtils.Sha256EmptyHash, null);
+        String derivedSecret = CryptoUtils.toHex(CryptoUtils.Tls13Sha256DerivedSecret, null);
+        Assertions.assertEquals("33ad0a1c607ec03b09e6cd9893680ce210adf300aa1f2660e1b22e10f170f92a".toUpperCase(), earlySecretHex);
+        Assertions.assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855".toUpperCase(), empty256Hex);
+        Assertions.assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855".toUpperCase(), derivedSecret);
+        byte[] sharedSecret = CryptoUtils.hexStringToBytes("df4a291baa1eb7cfa6934b29b474baad2697e29f1f920dcc77c8a0a088447624");
+        byte[] helloHash =    CryptoUtils.hexStringToBytes("b0a929f2178bb6983e1956842490b330557003ef032704fd88e1cd5ecf98e0ac");
+        TlsKeySchedule keySchedule = TlsKeySchedule.sha256Schedule(sharedSecret, helloHash);
+        byte[] handShakeSecret = keySchedule.getHandshakeSecret();
     }
 }

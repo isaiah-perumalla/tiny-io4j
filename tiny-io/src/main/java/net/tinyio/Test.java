@@ -7,13 +7,22 @@ import net.tinyio.nativesockets.sockaddr_in;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 
 public class Test {
 
     private static final MemorySegment ERRNO_LOCATION = net_h.__errno_location();
     private static final long MAX_FDS = 64;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        NetworkInterface.networkInterfaces().forEach(n -> {
+            try {
+                System.out.println(n.getDisplayName() + ", index=" + n.getIndex() + ", mulitcast-capable=" + n.supportsMulticast());
+            } catch (SocketException e) {
+                throw new RuntimeException(e);
+            }
+        });
         try (Arena arena = Arena.ofConfined()) {
             final int fd = net_h.socket(net_h.PF_INET(), net_h.SOCK_STREAM(), 0);
             int port = 4048;

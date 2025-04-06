@@ -95,7 +95,8 @@ public class EchoServer {
     }
 
     private static void logError(EchoClientContext context) {
-        logger.error("send error {}, [{}:{}]", context.lastErrorNo(),
+        int errorNo = context.lastErrorNo();
+        logger.error("send error {}, [{}:{}]", errorNo,
                 Utils.ipAddressToString(context.ipAddress()),
                 context.port());
     }

@@ -172,8 +172,14 @@ public class TcpListener<T extends TcpListener.ClientContext> {
     }
 
     private void handleDisconneted(T context) {
-        logger.info("disconnecting errno={}, [{}:{}]", context.lastErrorNo(),
-                Utils.ipAddressToString(context.ipAddress()), context.port());
+        if (context.lastErrorNo() == net_h.ECONNRESET()) {
+            logger.info("connection reset by peer [{}:{}]", Utils.ipAddressToString(context.ipAddress()),
+                    context.port());
+        }
+        else {
+            logger.info("disconnecting errno={}, [{}:{}]", context.lastErrorNo(),
+                    Utils.ipAddressToString(context.ipAddress()), context.port());
+        }
         mux.deRegister(context.ioHandle);
         net_h.close(context.fd);
         context.ioHandle = -1;

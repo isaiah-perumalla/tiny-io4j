@@ -67,6 +67,14 @@ public class net_h  {
     }
     /**
      * {@snippet :
+     * #define ECONNRESET 104
+     * }
+     */
+    public static int ECONNRESET() {
+        return (int)104L;
+    }
+    /**
+     * {@snippet :
      * #define POLLIN 1
      * }
      */
@@ -441,8 +449,24 @@ public class net_h  {
             throw new AssertionError("should not reach here", ex$);
         }
     }
+    public static MethodHandle strerror$MH() {
+        return RuntimeHelper.requireNonNull(constants$8.const$1,"strerror");
+    }
+    /**
+     * {@snippet :
+     * char* strerror(int __errnum);
+     * }
+     */
+    public static MemorySegment strerror(int __errnum) {
+        var mh$ = strerror$MH();
+        try {
+            return (java.lang.foreign.MemorySegment)mh$.invokeExact(__errnum);
+        } catch (Throwable ex$) {
+            throw new AssertionError("should not reach here", ex$);
+        }
+    }
     public static MethodHandle inet_addr$MH() {
-        return RuntimeHelper.requireNonNull(constants$8.const$1,"inet_addr");
+        return RuntimeHelper.requireNonNull(constants$8.const$3,"inet_addr");
     }
     /**
      * {@snippet :
@@ -458,7 +482,7 @@ public class net_h  {
         }
     }
     public static MethodHandle inet_ntoa$MH() {
-        return RuntimeHelper.requireNonNull(constants$8.const$3,"inet_ntoa");
+        return RuntimeHelper.requireNonNull(constants$8.const$5,"inet_ntoa");
     }
     /**
      * {@snippet :
@@ -474,7 +498,7 @@ public class net_h  {
         }
     }
     public static MethodHandle inet_ntop$MH() {
-        return RuntimeHelper.requireNonNull(constants$8.const$5,"inet_ntop");
+        return RuntimeHelper.requireNonNull(constants$9.const$1,"inet_ntop");
     }
     /**
      * {@snippet :
